@@ -1,0 +1,27 @@
+{
+  "name": "@smb/strategic-fetch",
+  "version": "0.0.1",
+  "description": "fetch which works with a strategy",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "author": "Harshit Pathak",
+  "license": "MIT",
+  "scripts": {
+    "tslint": "" ,
+    "build": "yarn tslint && tsc",
+    "test": "yarn build && yarn test"
+  },
+  "publishConfig": {
+    "registry": "https://msasg.pkgs.visualstudio.com/_packaging/ARIA-SDK/npm/registry"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ssh://smbengineering@vs-ssh.visualstudio.com:22/_ssh/strategic-fetch"
+  },
+  "keywords": [
+    "fetch",
+    "retry",
+    "react-native",
+    "strategy"
+  ]
+}
