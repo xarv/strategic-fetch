@@ -7,6 +7,7 @@ exports.strategicFetch = function (input, options, strategy) {
     let softRejectCodes = [];
     let logProvider = undefined;
     let delay = 100;
+    let internalLoggingEnabled = false;
     if (strategy) {
         retries = strategy.retryAttempts;
         retryPolicy = strategy.retryPolicy;
@@ -14,17 +15,27 @@ exports.strategicFetch = function (input, options, strategy) {
         softRejectCodes = strategy.softFailCodes;
         logProvider = strategy.logProvider;
         delay = _getDelay(strategy.retryPolicy);
+        internalLoggingEnabled = strategy.internalLoggingEnabled || false;
     }
     return new Promise((resolve, reject) => {
         let count = 1;
         const attempt = () => {
+            if (internalLoggingEnabled) {
+                console.log("attempt:" + count);
+            }
             return fetch(input, options)
                 .then(response => {
                 if (!response.ok) {
+                    if (internalLoggingEnabled) {
+                        console.log("response was not ok:" + response.status);
+                    }
                     if (softRejectCodes.indexOf(response.status) > -1 && count < retries) {
                         count++;
                         if (count > 1) {
                             delay = _getDelay(retryPolicy, count);
+                            if (internalLoggingEnabled) {
+                                console.log('retrying with delay:' + delay);
+                            }
                         }
                         delay ? setTimeout(attempt, delay) : attempt();
                     }
@@ -32,10 +43,19 @@ exports.strategicFetch = function (input, options, strategy) {
                         if (logProvider) {
                             logProvider.logFailure(`Response Status: ${response.status}, ${response.statusText}`, Object.assign({}, response));
                         }
-                        reject(new Error('Hit a Hard reject code'));
+                        reject(new Error('Received a hard reject code'));
+                    }
+                    else {
+                        if (logProvider) {
+                            logProvider.logFailure(`Response Status: ${response.status}, ${response.statusText}`, Object.assign({}, response));
+                        }
+                        reject(new Error('HTTP Error Occured:' + response.status));
                     }
                 }
                 else {
+                    if (internalLoggingEnabled) {
+                        console.log("response was ok:" + response.status + ' ...resolving');
+                    }
                     if (logProvider) {
                         logProvider.logSuccess(response.status);
                     }

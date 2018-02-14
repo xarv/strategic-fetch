@@ -1,6 +1,6 @@
 {
   "name": "@smb/strategic-fetch",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "fetch which works with a strategy",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

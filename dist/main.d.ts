@@ -4,6 +4,7 @@ export interface Strategy {
     retryPolicy: RetryPolicy;
     hardFailCodes: number[];
     softFailCodes: number[];
+    internalLoggingEnabled?: boolean;
     logProvider?: LogProvider;
 }
 export declare enum RetryPolicy {
