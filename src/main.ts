@@ -6,7 +6,7 @@ export const strategicFetch = function( input: RequestInfo, options?: RequestIni
     let softRejectCodes: number[] = [];
     let logProvider = undefined;
     let delay = 100;
-    let internalLoggingEnabled = strategy.internalLoggingEnabled || false;
+    let internalLoggingEnabled = false;
 
     if( strategy ) {
         retries = strategy.retryAttempts;
@@ -15,6 +15,7 @@ export const strategicFetch = function( input: RequestInfo, options?: RequestIni
         softRejectCodes = strategy.softFailCodes;
         logProvider = strategy.logProvider;
         delay = _getDelay(strategy.retryPolicy);
+        internalLoggingEnabled = strategy.internalLoggingEnabled || false;
     }
 
     return new Promise( (resolve, reject) => {
@@ -45,6 +46,11 @@ export const strategicFetch = function( input: RequestInfo, options?: RequestIni
                             logProvider.logFailure(`Response Status: ${response.status}, ${response.statusText}`, { ...response});
                         }
                         reject(new Error('Received a hard reject code'));
+                    } else {
+                        if(logProvider){
+                            logProvider.logFailure(`Response Status: ${response.status}, ${response.statusText}`, { ...response});
+                        }
+                        reject(new Error('HTTP Error Occured:' + response.status));
                     }
                 } else {
                     if(internalLoggingEnabled){
