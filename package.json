@@ -1,6 +1,6 @@
 {
   "name": "@smb/strategic-fetch",
-  "version": "0.0.1",
+  "version": "0.0.5",
   "description": "fetch which works with a strategy",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -10,9 +10,6 @@
     "tslint": "",
     "build": "yarn tslint && tsc",
     "test": "mocha --require isomorphic-fetch --reporter spec --compilers ts:ts-node/register \"test/**/*.test.ts\""
-  },
-  "publishConfig": {
-    "registry": "https://smbengineering.pkgs.visualstudio.com/_packaging/smbtelephony/npm/registry/"
   },
   "repository": {
     "type": "git",
