@@ -6,6 +6,7 @@ export const strategicFetch = function( input: RequestInfo, options?: RequestIni
     let softRejectCodes: number[] = [];
     let logProvider = undefined;
     let delay = 100;
+    let internalLoggingEnabled = strategy.internalLoggingEnabled || false;
 
     if( strategy ) {
         retries = strategy.retryAttempts;
@@ -21,22 +22,34 @@ export const strategicFetch = function( input: RequestInfo, options?: RequestIni
         let count = 1;
 
         const attempt = () => {
+            if(internalLoggingEnabled){
+              console.log("attempt:" + count);
+            }
             return fetch(input, options)
-              .then(response => {
+              .then( response => {
                 if ( !response.ok ) {
+                    if(internalLoggingEnabled){
+                        console.log("response was not ok:" + response.status);
+                    }
                     if (softRejectCodes.indexOf(response.status) > -1 && count < retries) {
                         count++;
                         if( count > 1){
                           delay = _getDelay(retryPolicy, count);
+                          if(internalLoggingEnabled){
+                            console.log('retrying with delay:' + delay);
+                          }
                         }
                         delay ? setTimeout(attempt, delay) : attempt()
-                      } else if(hardRejectCodes.indexOf(response.status) > -1 ){
-                          if(logProvider){
+                    } else if(hardRejectCodes.indexOf(response.status) > -1 ){                        
+                        if(logProvider){
                             logProvider.logFailure(`Response Status: ${response.status}, ${response.statusText}`, { ...response});
-                          }
-                          reject(new Error('Hit a Hard reject code'));
-                      }
+                        }
+                        reject(new Error('Received a hard reject code'));
+                    }
                 } else {
+                    if(internalLoggingEnabled){
+                        console.log("response was ok:" + response.status + ' ...resolving');
+                    }
                     if(logProvider){
                       logProvider.logSuccess(response.status);
                     }
@@ -70,6 +83,7 @@ export interface Strategy {
     retryPolicy: RetryPolicy;
     hardFailCodes: number[];
     softFailCodes: number[];
+    internalLoggingEnabled? : boolean;
     logProvider?: LogProvider; // Optional provider if not provided no logging will be done.
 }
 
