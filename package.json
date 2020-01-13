@@ -1,31 +1,29 @@
 {
-  "name": "@smb/strategic-fetch",
-  "version": "0.0.8",
-  "description": "fetch which works with a strategy",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "author": "Harshit Pathak",
-  "license": "MIT",
-  "scripts": {
-    "tslint": "",
-    "build": "yarn tslint && tsc",
-    "test": "mocha --require isomorphic-fetch --reporter spec --compilers ts:ts-node/register \"test/**/*.test.ts\""
-  },
-  "repository": {
-    "type": "git",
-    "url": "ssh://smbengineering@vs-ssh.visualstudio.com:22/_ssh/strategic-fetch"
-  },
-  "keywords": [
-    "fetch",
-    "retry",
-    "react-native",
-    "strategy"
-  ],
-  "devDependencies": {
-    "ts-node": "^4.1.0",
-    "typescript": "^2.7.1"
-  },
-  "dependencies": {
-    "isomorphic-fetch": "^2.2.1"
-  }
+    "name": "strategic-fetch",
+    "version": "0.0.9",
+    "description": "fetch which works with a strategy",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "author": "Harshit Pathak",
+    "license": "MIT",
+    "scripts": {
+        "tslint": "",
+        "build": "yarn tslint && tsc",
+        "test": "mocha --require isomorphic-fetch --reporter spec --compilers ts:ts-node/register \"test/**/*.test.ts\""
+    },
+    "keywords": [
+        "fetch",
+        "retry",
+        "react-native",
+        "strategy"
+    ],
+    "devDependencies": {
+        "ts-node": "^4.1.0",
+        "typescript": "^2.7.1"
+    },
+    "dependencies": {
+        "@types/jest": "^24.0.25",
+        "isomorphic-fetch": "^2.2.1",
+        "jest": "^24.9.0"
+    }
 }
